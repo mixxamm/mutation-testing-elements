@@ -1,4 +1,4 @@
-import { customElement, html, LitElement, property, PropertyValues, unsafeCSS } from 'lit-element';
+import { customElement, html, LitElement, property, PropertyValues, state, unsafeCSS } from 'lit-element';
 import { MetricsResult, TestFileModel, TestMetrics, TestModel } from 'mutation-testing-metrics';
 import { MteCustomEvent } from '../../lib/custom-events';
 import { bootstrap } from '../../style';
@@ -11,13 +11,13 @@ export class MutationTestReportTestViewComponent extends LitElement {
   @property()
   public drawerMode: DrawerMode = 'closed';
 
-  @property()
+  @property({ attribute: false })
   public result!: MetricsResult<TestFileModel, TestMetrics>;
 
   @property({ attribute: false, reflect: false })
   public path!: string[];
 
-  @property()
+  @state()
   private selectedTest?: TestModel;
 
   public static styles = [bootstrap, unsafeCSS(style)];
@@ -43,7 +43,8 @@ export class MutationTestReportTestViewComponent extends LitElement {
       <main @click="${this.handleClick}">
         <div class="row">
           <div class="totals col-sm-11">
-            <mte-metrics-table .columns="${COLUMNS}" .currentPath="${this.path}" .model="${this.result}"> </mte-metrics-table>
+            <mte-metrics-table .columns="${COLUMNS}" .currentPath="${this.path}" .model="${this.result as MetricsResult<any, any>}">
+            </mte-metrics-table>
           </div>
         </div>
         ${this.result.file ? html`<mte-test-file @test-selected="${this.handleTestSelected}" .model="${this.result.file}"></mte-test-file>` : ''}

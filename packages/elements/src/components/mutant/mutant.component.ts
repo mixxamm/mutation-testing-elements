@@ -1,19 +1,22 @@
-import { customElement, LitElement, property, html, unsafeCSS } from 'lit-element';
-import { MutantResult } from 'mutation-testing-report-schema/api';
-import { bootstrap } from '../../style';
-import { getContextClassForStatus } from '../../lib/htmlHelpers';
-import style from './mutant.scss';
+import { customElement, html, LitElement, property, unsafeCSS } from 'lit-element';
+import type { MutantModel } from 'mutation-testing-metrics';
 import { createCustomEvent } from '../../lib/custom-events';
+import { getContextClassForStatus } from '../../lib/htmlHelpers';
+import { bootstrap } from '../../style';
+import style from './mutant.scss';
 
+/**
+ * @fires mutant-selected
+ */
 @customElement('mte-mutant')
 export class MutationTestReportMutantComponent extends LitElement {
-  @property()
-  public mutant: MutantResult | undefined;
+  @property({ attribute: false })
+  public mutant: MutantModel | undefined;
 
-  @property()
+  @property({ type: Boolean })
   public show = true;
 
-  @property()
+  @property({ type: Boolean })
   public expand = false;
 
   public static styles = [bootstrap, unsafeCSS(style)];

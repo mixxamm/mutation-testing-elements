@@ -27,6 +27,9 @@ interface TestContext extends BaseContext {
 
 type Context = MutantContext | TestContext;
 
+/**
+ * @fires theme-changed
+ */
 @customElement('mutation-test-report-app')
 export class MutationTestReportAppComponent extends LitElement {
   @property({ attribute: false })
@@ -44,7 +47,7 @@ export class MutationTestReportAppComponent extends LitElement {
   @property({ attribute: false })
   public context: Context = { view: View.mutant, path: [] };
 
-  @property()
+  @property({ type: Array })
   public path: ReadonlyArray<string> = [];
 
   @property({ attribute: 'title-postfix' })

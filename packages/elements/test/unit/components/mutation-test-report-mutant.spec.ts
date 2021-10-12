@@ -5,6 +5,7 @@ import { MutantStatus, MutantResult } from 'mutation-testing-report-schema/api';
 import { expectedMutantColors } from '../../helpers/helperFunctions';
 import { getContextClassForStatus } from '../../../src/lib/htmlHelpers';
 import { CustomEventMap } from '../../../src/lib/custom-events';
+import { MutantModel } from 'mutation-testing-metrics';
 
 describe(MutationTestReportMutantComponent.name, () => {
   let sut: CustomElementFixture<MutationTestReportMutantComponent>;
@@ -19,7 +20,7 @@ describe(MutationTestReportMutantComponent.name, () => {
 
   it('should not render when show = false', async () => {
     sut.element.show = false;
-    sut.element.mutant = createMutantResult();
+    sut.element.mutant = createMutantModel();
     await sut.whenStable();
     const badge = sut.$('span.badge');
     expect(getComputedStyle(badge).display).eq('none');
@@ -33,7 +34,7 @@ describe(MutationTestReportMutantComponent.name, () => {
 
   it('should render when show = true and mutant is set', async () => {
     sut.element.show = true;
-    sut.element.mutant = createMutantResult();
+    sut.element.mutant = createMutantModel();
     await sut.whenStable();
     expect(sut.$('span.badge')).ok;
   });
@@ -44,7 +45,7 @@ describe(MutationTestReportMutantComponent.name, () => {
 
   it('should hide replacement', async () => {
     sut.element.show = true;
-    sut.element.mutant = createMutantResult();
+    sut.element.mutant = createMutantModel();
     await sut.whenStable();
     expect(sut.$('.replacement').hidden).true;
   });
@@ -54,7 +55,7 @@ describe(MutationTestReportMutantComponent.name, () => {
       const actualMutantStatus = status as MutantStatus;
       sut.element.style.cssText = `--bs-${getContextClassForStatus(actualMutantStatus)}-bg: ${expectedColor};`;
       sut.element.show = true;
-      sut.element.mutant = createMutantResult({ status: actualMutantStatus });
+      sut.element.mutant = createMutantModel({ status: actualMutantStatus });
       await sut.whenStable();
       const badge = sut.$('span.badge');
       expect(getComputedStyle(badge).backgroundColor).eq(expectedColor);
@@ -65,7 +66,7 @@ describe(MutationTestReportMutantComponent.name, () => {
   it('should render replacement when the button is clicked', async () => {
     // Arrange
     sut.element.show = true;
-    sut.element.mutant = createMutantResult({ replacement: 'foobar' });
+    sut.element.mutant = createMutantModel({ replacement: 'foobar' });
     await sut.whenStable();
     const actualReplacement = sut.$('.bg-info');
 
@@ -80,7 +81,7 @@ describe(MutationTestReportMutantComponent.name, () => {
 
   it('should dispatch "mutant-selected" event with "selected" true when the mutant is opened', async () => {
     // Arrange
-    const expectedEventDetail: CustomEventMap['mutant-selected'] = { selected: true, mutant: createMutantResult({ replacement: 'foobar' }) };
+    const expectedEventDetail: CustomEventMap['mutant-selected'] = { selected: true, mutant: createMutantModel({ replacement: 'foobar' }) };
     sut.element.mutant = expectedEventDetail.mutant;
     sut.element.show = true;
     await sut.whenStable();
@@ -94,7 +95,7 @@ describe(MutationTestReportMutantComponent.name, () => {
 
   it('should dispatch "mutant-selected" event with "selected" false when the mutant is opened', async () => {
     // Arrange
-    const expectedEventDetail: CustomEventMap['mutant-selected'] = { selected: false, mutant: createMutantResult({ replacement: 'foobar' }) };
+    const expectedEventDetail: CustomEventMap['mutant-selected'] = { selected: false, mutant: createMutantModel({ replacement: 'foobar' }) };
     sut.element.mutant = expectedEventDetail.mutant;
     sut.element.show = true;
     sut.element.expand = true;
@@ -110,7 +111,7 @@ describe(MutationTestReportMutantComponent.name, () => {
   it('should fill the replacement with mutator name if no replacement is defined', async () => {
     // Arrange
     sut.element.show = true;
-    sut.element.mutant = createMutantResult({ mutatorName: 'FooMutator', replacement: undefined });
+    sut.element.mutant = createMutantModel({ mutatorName: 'FooMutator', replacement: undefined });
     await sut.whenStable();
     const actualReplacement = sut.$('.bg-info');
 
@@ -126,7 +127,7 @@ describe(MutationTestReportMutantComponent.name, () => {
   it('should hide replacement when the button is clicked again', async () => {
     // Arrange
     sut.element.show = true;
-    sut.element.mutant = createMutantResult({ replacement: 'foobar' });
+    sut.element.mutant = createMutantModel({ replacement: 'foobar' });
     await sut.whenStable();
     const actualReplacement = sut.$('.bg-info');
 
@@ -143,7 +144,7 @@ describe(MutationTestReportMutantComponent.name, () => {
   it('should line-through original code when the button is clicked', async () => {
     // Arrange
     sut.element.show = true;
-    sut.element.mutant = createMutantResult({ replacement: 'foobar' });
+    sut.element.mutant = createMutantModel({ replacement: 'foobar' });
     sut.element.innerHTML = '<span>inner code</span>';
     await sut.whenStable();
 
@@ -157,7 +158,7 @@ describe(MutationTestReportMutantComponent.name, () => {
     expect(getComputedStyle(actualOriginalCode).textDecoration).matches(/line-through/);
   });
 
-  function createMutantResult(overrides?: Partial<MutantResult>) {
+  function createMutantModel(overrides?: Partial<MutantResult>): MutantModel {
     const defaults: MutantResult = {
       id: '42',
       location: {
@@ -168,6 +169,6 @@ describe(MutationTestReportMutantComponent.name, () => {
       replacement: '+',
       status: MutantStatus.Timeout,
     };
-    return { ...defaults, ...overrides };
+    return new MutantModel({ ...defaults, ...overrides });
   }
 });

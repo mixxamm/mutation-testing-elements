@@ -1,6 +1,6 @@
 import { customElement, html, LitElement, property, unsafeCSS } from 'lit-element';
 import { MetricsResult } from 'mutation-testing-metrics';
-import { Thresholds } from 'mutation-testing-report-schema/api';
+import type { Thresholds } from 'mutation-testing-report-schema/api';
 import { toAbsoluteUrl } from '../../lib/htmlHelpers';
 import { bootstrap } from '../../style';
 import style from './metrics-table.scss';
@@ -22,10 +22,10 @@ export interface Column<TMetric> {
 
 @customElement('mte-metrics-table')
 export class MutationTestReportTestMetricsTable<TFile, TMetric> extends LitElement {
-  @property()
+  @property({ attribute: false })
   public model?: MetricsResult<TFile, TMetric>;
 
-  @property()
+  @property({ type: Array })
   public currentPath: string[] = [];
 
   public static styles = [bootstrap, unsafeCSS(style)];
@@ -33,7 +33,7 @@ export class MutationTestReportTestMetricsTable<TFile, TMetric> extends LitEleme
   @property({ type: Array })
   public columns!: Column<TMetric>[];
 
-  @property()
+  @property({ attribute: false })
   public thresholds: Thresholds = {
     high: 80,
     low: 60,

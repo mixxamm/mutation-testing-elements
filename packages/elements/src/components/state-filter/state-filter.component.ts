@@ -1,4 +1,4 @@
-import { customElement, LitElement, property, PropertyValues, html, unsafeCSS } from 'lit-element';
+import { customElement, LitElement, property, PropertyValues, html, unsafeCSS, state } from 'lit-element';
 import { bootstrap } from '../../style';
 import style from './state-filter.scss';
 import { createCustomEvent } from '../../lib/custom-events';
@@ -12,9 +12,14 @@ export interface StateFilter<TStatus> {
   context: string;
 }
 
+/**
+ * @fires filters-changed
+ * @fires expand-all
+ * @fires collapse-all
+ */
 @customElement('mte-state-filter')
-export class MutationTestReportFileStateFilterComponent<TStatus> extends LitElement {
-  @property()
+export class MutationTestReportFileStateFilterComponent<TStatus extends string> extends LitElement {
+  @state()
   private get collapseButtonText() {
     if (this.collapsed) {
       return 'Expand all';
@@ -23,7 +28,7 @@ export class MutationTestReportFileStateFilterComponent<TStatus> extends LitElem
     }
   }
 
-  @property()
+  @state()
   private collapsed = true;
 
   @property({ type: Array })
@@ -67,13 +72,13 @@ export class MutationTestReportFileStateFilterComponent<TStatus> extends LitElem
           // Key function. I super duper want that all properties are weighed here,
           // see https://lit-html.polymer-project.org/guide/writing-templates#repeating-templates-with-the-repeat-directive
           (filter) => JSON.stringify(filter),
-          (filter) => html`<div data-status="${filter.status}" class="form-check form-check-inline">
+          (filter) => html`<div data-status="${filter.status as string}" class="form-check form-check-inline">
             <label class="form-check-label">
               <input
                 class="form-check-input"
                 type="checkbox"
                 ?checked="${filter.enabled}"
-                value="${filter.status}"
+                value="${filter.status as string}"
                 @input="${(el: Event) => this.checkboxChanged(filter, (el.target as HTMLInputElement).checked)}"
               />
               <span class="badge bg-${filter.context}">${filter.label} (${filter.count})</span>

@@ -1,5 +1,5 @@
 import { MutantResult, MutantStatus, FileResult, Location, TestDefinition, MutationTestResult, TestFile } from 'mutation-testing-report-schema/api';
-import { Metrics, MetricsResult, TestFileModel, TestMetrics } from 'mutation-testing-metrics';
+import { FileUnderTestModel, Metrics, MetricsResult, TestFileModel, TestMetrics } from 'mutation-testing-metrics';
 import { StateFilter } from '../../src/components/state-filter/state-filter.component';
 
 export function createMutantResult(overrides?: Partial<MutantResult>): MutantResult {
@@ -54,6 +54,10 @@ export function createFileResult(overrides?: Partial<FileResult>): FileResult {
     source: 'const bar = foo();',
   };
   return { ...defaults, ...overrides };
+}
+
+export function createFileUnderTestModel(overrides?: Partial<FileResult>, name = ''): FileUnderTestModel {
+  return new FileUnderTestModel(createFileResult(overrides), name);
 }
 
 export function createMetricsResult(overrides?: Partial<MetricsResult>): MetricsResult {

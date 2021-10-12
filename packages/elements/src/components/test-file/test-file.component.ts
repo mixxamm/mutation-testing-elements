@@ -1,4 +1,4 @@
-import { customElement, html, LitElement, property, PropertyValues, unsafeCSS } from 'lit-element';
+import { customElement, html, LitElement, property, PropertyValues, state, unsafeCSS } from 'lit-element';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 
 import { TestFileModel, TestStatus } from 'mutation-testing-metrics';
@@ -16,12 +16,12 @@ import { MutationTestReportTestListItemComponent } from '../test-list-item/test-
 
 @customElement('mte-test-file')
 export class MutationTestReportTestFile extends LitElement {
-  @property()
+  @property({ attribute: false })
   public model: TestFileModel | undefined;
 
   public static styles = [prismjs, bootstrap, unsafeCSS(style)];
 
-  @property()
+  @state()
   private filters: StateFilter<TestStatus>[] = [];
 
   private forEachTestComponent(action: (test: MutationTestReportTestListItemComponent | MutationTestReportTestComponent) => void) {

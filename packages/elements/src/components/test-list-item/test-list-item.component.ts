@@ -5,9 +5,12 @@ import { getEmojiForTestStatus } from '../../lib/htmlHelpers';
 import { bootstrap } from '../../style';
 import style from './test-list-item.scss';
 
+/**
+ * @fires test-selected
+ */
 @customElement('mte-test-list-item')
 export class MutationTestReportTestListItemComponent extends LitElement {
-  @property()
+  @property({ attribute: false })
   public test!: TestModel;
 
   @property({ reflect: true, type: Boolean })

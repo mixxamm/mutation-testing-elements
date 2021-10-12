@@ -1,18 +1,19 @@
 import { CustomElementFixture } from '../helpers/CustomElementFixture';
 import { MutationTestReportFileComponent } from '../../../src/components/file/file.component';
 import { expect } from 'chai';
-import { FileResult, MutantStatus } from 'mutation-testing-report-schema/api';
+import { MutantStatus } from 'mutation-testing-report-schema/api';
 import { MutationTestReportMutantComponent } from '../../../src/components/mutant/mutant.component';
 import { MutationTestReportFileStateFilterComponent, StateFilter } from '../../../src/components/state-filter/state-filter.component';
-import { createFileResult } from '../../helpers/factory';
+import { createFileUnderTestModel } from '../../helpers/factory';
 import { createCustomEvent } from '../../../src/lib/custom-events';
+import { FileUnderTestModel } from 'mutation-testing-metrics';
 
 describe(MutationTestReportFileComponent.name, () => {
   let sut: CustomElementFixture<MutationTestReportFileComponent>;
-  let fileResult: FileResult;
+  let fileResult: FileUnderTestModel;
 
   beforeEach(async () => {
-    fileResult = createFileResult();
+    fileResult = createFileUnderTestModel();
     sut = new CustomElementFixture('mte-file');
     sut.element.model = fileResult;
     await sut.whenStable();

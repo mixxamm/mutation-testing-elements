@@ -10,7 +10,7 @@ const describeTest = (test: TestModel) => html`${test.name}${test.sourceFile && 
 
 @customElement('mte-drawer-mutant')
 export class MutationTestReportDrawerMutant extends LitElement {
-  @property()
+  @property({ attribute: false })
   public mutant?: MutantModel;
 
   @property({ reflect: true })
@@ -19,7 +19,7 @@ export class MutationTestReportDrawerMutant extends LitElement {
   public static styles = [bootstrap, unsafeCSS(style)];
 
   public render() {
-    return html`<mte-drawer ?hasDetail="${this.mutant?.killedByTests || this.mutant?.coveredByTests}" .mode="${this.mode}">
+    return html`<mte-drawer ?hasDetail="${Boolean(this.mutant?.killedByTests || this.mutant?.coveredByTests)}" .mode="${this.mode}">
       ${renderIfPresent(
         this.mutant,
         (mutant) => html`

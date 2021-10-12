@@ -5,7 +5,7 @@ import { View } from '../lib/router';
 
 @customElement('mte-breadcrumb')
 export class MutationTestReportBreadcrumbComponent extends LitElement {
-  @property()
+  @property({ type: Array })
   public path: string[] | undefined;
 
   @property()

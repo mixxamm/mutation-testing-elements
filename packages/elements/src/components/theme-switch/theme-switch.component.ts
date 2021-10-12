@@ -3,6 +3,9 @@ import { createCustomEvent } from '../../lib/custom-events';
 import { bootstrap } from '../../style';
 import style from './theme-switch.scss';
 
+/**
+ * @fires theme-switch
+ */
 @customElement('mte-theme-switch')
 export class MutationTestReportThemeSwitchComponent extends LitElement {
   @property()

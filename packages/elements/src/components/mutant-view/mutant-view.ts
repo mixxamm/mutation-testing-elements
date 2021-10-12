@@ -1,6 +1,6 @@
-import { customElement, html, LitElement, property, PropertyValues, unsafeCSS } from 'lit-element';
-import { FileUnderTestModel, Metrics, MetricsResult } from 'mutation-testing-metrics';
-import { MutantResult as MutantModel, Thresholds } from 'mutation-testing-report-schema/api';
+import { customElement, html, LitElement, property, PropertyValues, state, unsafeCSS } from 'lit-element';
+import { FileUnderTestModel, Metrics, MetricsResult, MutantModel } from 'mutation-testing-metrics';
+import { Thresholds } from 'mutation-testing-report-schema/api';
 import { MteCustomEvent } from '../../lib/custom-events';
 import { bootstrap } from '../../style';
 import { DrawerMode } from '../drawer/drawer.component';
@@ -12,12 +12,12 @@ export class MutationTestReportMutantViewComponent extends LitElement {
   @property()
   public drawerMode: DrawerMode = 'closed';
 
-  @property()
+  @state()
   private selectedMutant?: MutantModel;
 
   public static styles = [bootstrap, unsafeCSS(style)];
 
-  @property()
+  @property({ attribute: false })
   public result!: MetricsResult<FileUnderTestModel, Metrics>;
 
   @property({ attribute: false, reflect: false })
@@ -47,7 +47,12 @@ export class MutationTestReportMutantViewComponent extends LitElement {
       <main @click="${this.handleClick}">
         <div class="row">
           <div class="totals col-sm-11">
-            <mte-metrics-table .columns="${COLUMNS}" .currentPath="${this.path}" .thresholds="${this.thresholds}" .model="${this.result}">
+            <mte-metrics-table
+              .columns="${COLUMNS}"
+              .currentPath="${this.path}"
+              .thresholds="${this.thresholds}"
+              .model="${this.result as MetricsResult<any, any>}"
+            >
             </mte-metrics-table>
           </div>
         </div>

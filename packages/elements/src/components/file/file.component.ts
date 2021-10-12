@@ -1,21 +1,22 @@
-import { LitElement, html, property, customElement, unsafeCSS, PropertyValues } from 'lit-element';
+import { customElement, html, LitElement, property, PropertyValues, state, unsafeCSS } from 'lit-element';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
+import type { FileUnderTestModel } from 'mutation-testing-metrics';
+import { MutantStatus } from 'mutation-testing-report-schema/api';
+import { highlightElement } from 'prismjs/components/prism-core';
+import { markMutants } from '../../lib/code-helpers';
+import { getContextClassForStatus, getEmojiForStatus } from '../../lib/htmlHelpers';
+import { bootstrap, prismjs } from '../../style';
 import { MutationTestReportMutantComponent } from '../mutant/mutant.component';
 import { StateFilter } from '../state-filter/state-filter.component';
-import { bootstrap, prismjs } from '../../style';
-import { markMutants } from '../../lib/code-helpers';
-import { FileResult, MutantStatus } from 'mutation-testing-report-schema/api';
-import { highlightElement } from 'prismjs/components/prism-core';
 import style from './file.scss';
-import { getContextClassForStatus, getEmojiForStatus } from '../../lib/htmlHelpers';
 
 @customElement('mte-file')
 export class MutationTestReportFileComponent extends LitElement {
-  @property()
+  @state()
   private filters: StateFilter<MutantStatus>[] = [];
 
-  @property()
-  public model!: FileResult;
+  @property({ attribute: false })
+  public model!: FileUnderTestModel;
 
   public static styles = [prismjs, bootstrap, unsafeCSS(style)];
 

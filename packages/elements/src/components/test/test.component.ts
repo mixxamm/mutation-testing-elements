@@ -6,15 +6,18 @@ import style from './test.scss';
 import { bootstrap } from '../../style';
 import { createCustomEvent } from '../../lib/custom-events';
 
+/**
+ * @fires test-selected
+ */
 @customElement('mte-test')
 export class MutationTestReportTestComponent extends LitElement {
-  @property()
+  @property({ attribute: false })
   public test: TestModel | undefined;
 
-  @property()
+  @property({ type: Boolean })
   public active = false;
 
-  @property()
+  @property({ type: Boolean })
   public show = true;
 
   public static styles = [bootstrap, unsafeCSS(style)];

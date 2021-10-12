@@ -5,7 +5,18 @@
     "outDir": "../dist",
     "module": "es2015",
     "moduleResolution": "node",
-    "lib": ["es2019", "dom", "dom.iterable"]
+    "lib": ["es2019", "dom", "dom.iterable"],
+    "plugins": [
+      {
+        "name": "ts-lit-plugin",
+        "strict": true,
+        "rules": {
+          "no-missing-import": "off",
+          "no-unknown-tag-name": "off",
+          "no-unknown-event": "warn"
+        }
+      }
+    ]
   },
   "references": [
     {
